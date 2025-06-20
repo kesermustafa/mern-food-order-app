@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Exo:ital,wght@0,100..900;1,100..900&family=Monsieur+La+Doulaise&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+
+:root {
+  --background: #222831;
+  --foreground: #ffffff;
+}
+
+@theme {
+  --font-dancing: "Dancing Script", cursive;
+  --font-exo: "Exo", "sans-serif";
+  --font-roboto: "Roboto", "sans-serif";
+  --font-montserrat: "Monsieur La Doulaise", cursive;
+}
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+
+}
