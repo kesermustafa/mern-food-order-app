@@ -1,55 +1,44 @@
-/*"use client"
-import React, {useState, useRef} from 'react';*/
+"use client"
 import NavLinks from "@/src/app/components/NavLinks";
 import Link from "next/link";
 import {FaSearch, FaShoppingCart, FaUser} from "react-icons/fa";
+import ScrollMenu from "@/src/app/components/scrollMenu";
+import OrderOnline from "@/src/app/components/OrderOnline";
+import { usePathname } from 'next/navigation';
+
 
 const Navbar = () => {
-/*    const [isModal, setIsModal] = useState(false);
-    const modalRef = useRef(null);*/
 
-/*    const handleModalClose = (e) => {
-        if (e.target === e.currentTarget) {
-            setIsModal(false);
-        }
-    };*/
+    const isHome = usePathname() === '/';
 
     return (
-        <div className='container mx-auto h-[5rem] flex items-center justify-between'>
-            <Link href={"/"} className='font-dancing font-[600] text-[2rem] text-amber-500 p-2'>KeserFood</Link>
-            <NavLinks/>
-            <div className='flex gap-2 items-center justify-between'>
-                <Link href={"/"} className={'hover:text-amber-500'}><FaUser /></Link>
-                <Link href={"/"} className={'hover:text-amber-500'}><FaShoppingCart /></Link>
-                <Link href={"/search"} className={'hover:text-amber-500'}><FaSearch /></Link>
 
-{/*                <button
-                    className={'hover:text-amber-500 cursor-pointer'}
-                    onClick={(e) => {setIsModal(!isModal);
-                    }}
-                >
-                    <FaSearch />
-                </button>*/}
-                <Link href={'/menu'}>
-                    <button className={'cursor-pointer rounded-full font-montserrat text-gray-800 text-xs font-semibold text-nowrap px-4 py-2 bg-amber-500 transition-all hover:bg-amber-400 hover:text-gray-900'}>
-                        Order Online
-                    </button>
-                </Link>
-            </div>
-{/*            {isModal && (
-                <div
-                    className={"absolute rounded-xl inset-0 bg-black/30 flex items-center justify-center"}
-                    onClick={handleModalClose}
-                    ref={modalRef}
-                >
-                    <div
-                        className={'flex w-full sm:w-[90%] md:w-[80%] lg:w-[70%] h-[70%] rounded-xl items-center text-gray-800 justify-center bg-white'}
-                    >
-                        MODAL
+        <div className={`${isHome ? "fixed" : "flex"}  top-0 left-0 right-0 z-40`}>
+            <div className='container mx-auto h-[5rem] flex items-center justify-between px-2'>
+                <Link href={"/"} className='font-dancing font-[600] text-[2rem] text-amber-500'>KeserFood</Link>
+
+                <NavLinks/>
+
+                <div className='flex items-center justify-between'>
+
+                    <div className="flex mr-4 items-center gap-4">
+                        <Link href={"/"} className={'hover:text-amber-500'}><FaUser size={18}/></Link>
+                        <Link href={"/"} className={'hover:text-amber-500'}><FaShoppingCart size={18}/></Link>
+                        <Link href={"/search"} scroll={false} className={'hover:text-amber-500'}><FaSearch
+                            size={18}/></Link>
                     </div>
+
+                    <div className={'hidden md:block'}>
+                        <OrderOnline/>
+                    </div>
+
+                    <ScrollMenu/>
+
                 </div>
-            )}*/}
+
+            </div>
         </div>
+
     );
 };
 

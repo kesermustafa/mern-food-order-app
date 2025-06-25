@@ -1,8 +1,13 @@
+import Carousel from "@/src/app/components/Carousel";
+import Campaigns from "@/src/app/components/Campaigns";
 
 export default function Home() {
   return (
-    <div>
-      Home
+    <div >
+        <Carousel/>
+
+        <Campaigns/>
+
     </div>
   );
 }

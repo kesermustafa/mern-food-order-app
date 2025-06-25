@@ -3,7 +3,7 @@ import Navbar from "@/src/app/components/Navbar";
 
 const Layout = ({children, modal}) => {
     return (
-        <div>
+        <div >
             <Navbar/>
             {children}
             {modal}
