@@ -1,4 +1,4 @@
-// hooks/useWheelScroll.js
+
 import { useEffect, useRef, useState } from 'react';
 
 export const useWheelScroll = (options = {}) => {

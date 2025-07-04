@@ -7,8 +7,6 @@ import { usePathname } from 'next/navigation'; // App Router için
 const NavLinks = () => {
     const pathname = usePathname();
 
-    console.log('pathname', pathname);
-
     const getLinkClass = (path) => {
         const isActive = pathname === path;
         const homePage = pathname === "/";
