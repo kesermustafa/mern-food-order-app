@@ -3,7 +3,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {Calendar, Clock, ChevronLeft, ChevronRight, X} from 'lucide-react';
 
-const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeChange}) => {
+const CustomDateTime = ({placeholder = "Select Date & Time", onDateTimeChange, resetSignal}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState('');
@@ -28,6 +28,14 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        if (resetSignal) {
+            setSelectedDate(null);
+            setSelectedTime('');
+            setActiveTab('date');
+        }
+    }, [resetSignal]);
 
     const getDaysInMonth = (date) => {
         const year = date.getFullYear();
@@ -126,12 +134,12 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
     return (
         <div className=" " ref={pickerRef}>
             <div
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white cursor-pointer hover:border-amber-500 transition-colors duration-200 flex items-center justify-between"
+                className="w-full px-4 py-2 border border-amber-500 rounded bg-white cursor-pointer hover:border-amber-500 transition-colors duration-200 flex items-center justify-between"
                 onClick={() => setIsOpen(!isOpen)}
             >
-        <span className={`${selectedDate ? 'text-gray-800' : 'text-gray-400'}`}>
-          {formatDisplayDate()}
-        </span>
+                <span className={`${selectedDate ? 'text-gray-800' : 'text-gray-400'}`}>
+                    {formatDisplayDate()}
+                </span>
                 <Calendar className="w-5 h-5 text-amber-500"/>
             </div>
 
@@ -149,6 +157,7 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                         </div>
                         <div className="flex mt-2 bg-amber-400 rounded-lg p-1">
                             <button
+                                type="button"
                                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                                     activeTab === 'date'
                                         ? 'bg-white text-amber-600 shadow-sm'
@@ -160,6 +169,7 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                 Date
                             </button>
                             <button
+                                type="button"
                                 className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                                     activeTab === 'time'
                                         ? 'bg-white text-amber-600 shadow-sm'
@@ -181,6 +191,7 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                 {/* Month Navigation */}
                                 <div className="flex justify-between items-center mb-4">
                                     <button
+                                        type="button"
                                         onClick={() => navigateMonth(-1)}
                                         className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                                     >
@@ -190,6 +201,7 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                         {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                                     </h4>
                                     <button
+                                        type="button"
                                         onClick={() => navigateMonth(1)}
                                         className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                                     >
@@ -210,21 +222,19 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                 <div className="grid grid-cols-7 gap-1">
                                     {getDaysInMonth(currentMonth).map((date, index) => (
                                         <button
+                                            type="button"
                                             key={index}
                                             onClick={() => date && handleDateClick(date)}
                                             disabled={!date || isDateDisabled(date)}
-                                            className={`
-                        h-10 w-10 text-sm rounded-lg transition-all duration-200 
-                        ${!date ? 'invisible' : ''}
-                        ${isDateDisabled(date)
+                                            className={`h-10 w-10 text-sm rounded-lg transition-all duration-200
+                                                ${!date ? 'invisible' : ''}
+                                                ${isDateDisabled(date)
                                                 ? 'text-gray-300 cursor-not-allowed'
-                                                : 'hover:bg-amber-50 hover:text-amber-600 cursor-pointer'
-                                            }
-                        ${selectedDate && date && selectedDate.toDateString() === date.toDateString()
+                                                : 'hover:bg-amber-50 hover:text-amber-600 cursor-pointer'}
+                                                ${selectedDate && date && selectedDate.toDateString() === date.toDateString()
                                                 ? 'bg-amber-500 text-white shadow-lg'
-                                                : 'text-gray-700'
-                                            }
-                      `}
+                                                : 'text-gray-700'}
+                                            `}
                                         >
                                             {date?.getDate()}
                                         </button>
@@ -246,15 +256,14 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                 <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto">
                                     {generateTimeSlots().map((time) => (
                                         <button
+                                            type="button"
                                             key={time}
                                             onClick={() => handleTimeChange(time)}
-                                            className={`
-                        py-2 px-3 text-sm rounded-lg transition-all duration-200 border
-                        ${selectedTime === time
+                                            className={`py-2 px-3 text-sm rounded-lg transition-all duration-200 border
+                                                ${selectedTime === time
                                                 ? 'bg-amber-500 text-white border-amber-500 shadow-md'
-                                                : 'text-gray-700 border-gray-200 hover:bg-amber-50 hover:border-amber-300'
-                                            }
-                      `}
+                                                : 'text-gray-700 border-gray-200 hover:bg-amber-50 hover:border-amber-300'}
+                                            `}
                                         >
                                             {time}
                                         </button>
@@ -268,6 +277,7 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                     <div className="border-t border-gray-200 p-4 bg-gray-50">
                         <div className="flex justify-between items-center">
                             <button
+                                type="button"
                                 onClick={() => {
                                     setSelectedDate(null);
                                     setSelectedTime('');
@@ -278,15 +288,14 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
                                 Clear
                             </button>
                             <button
+                                type="button"
                                 onClick={handleConfirm}
                                 disabled={!selectedDate || !selectedTime}
-                                className={`
-                  px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200
-                  ${selectedDate && selectedTime
+                                className={`px-6 py-2 text-sm font-medium rounded-lg transition-all duration-200
+                                    ${selectedDate && selectedTime
                                     ? 'bg-amber-500 text-white hover:bg-amber-600 shadow-md'
-                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                }
-                `}
+                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'}
+                                `}
                             >
                                 Confirm
                             </button>
@@ -298,4 +307,4 @@ const CustomDateTimePicker = ({placeholder = "Select Date & Time", onDateTimeCha
     );
 };
 
-export default CustomDateTimePicker;
+export default CustomDateTime;

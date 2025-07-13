@@ -1,4 +1,6 @@
-const Input = ({id, min, type = "text", placeholder = "Enter text", ...props}) => {
+import {CheckCircle} from "lucide-react";
+
+const Input = ({id, min, isValid, type = "text", placeholder = "Enter text", ...props}) => {
     const isNumber = type === "number";
     const isDate = type === "date";
 
@@ -31,6 +33,11 @@ const Input = ({id, min, type = "text", placeholder = "Enter text", ...props}) =
                 >
                     {placeholder}
                 </label>
+
+                {isValid && (
+                    <CheckCircle
+                        className="w-5 h-5 text-green-500 absolute right-4 top-1/2 transform -translate-y-1/2"/>
+                )}
             </div>
         </div>
     );
