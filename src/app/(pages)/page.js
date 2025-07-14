@@ -21,9 +21,7 @@ export default function Home() {
             <CustomersReview/>
 
             <Reservations/>
-
-            <Footer/>
-
+            <div className={'h-[100px]'}></div>
         </div>
     );
 }

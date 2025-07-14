@@ -8,7 +8,8 @@ const About = () => {
         <div className={"bg-gray-800"}>
 
 
-            <div className={' container mx-auto   w-full h-[600px] flex flex-col-reverse py-10 sm:p-0 sm:flex-row'}>
+            <div
+                className={' container mx-auto   w-full h-[700px] flex flex-col-reverse py-10 sm:p-0 sm:flex-row'}>
 
                 <div className={"flex   flex-1 sm:flex-row sm:flex-4 items-center justify-center overflow-hidden"}>
                     <div className={"relative w-full h-full sm:h-4/5 flex items-center justify-center"}>

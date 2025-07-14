@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Title from "@/src/app/components/Title";
 import MenuItem from "@/src/app/components/products/MenuItem";
 
@@ -10,7 +10,7 @@ const MenuWrapper = () => {
     return (
         <div className="!container mx-auto">
             <div className="flex flex-col gap-4 items-center">
-                <Title title="Our Menu" desing="text-5xl mb-8 text-amber-600" />
+                <Title title="Our Menu" desing="text-5xl mb-8 text-amber-600"/>
 
                 <div className="flex flex-wrap items-center w-full justify-center gap-4">
                     {categories.map((category) => (
@@ -29,7 +29,7 @@ const MenuWrapper = () => {
                 </div>
             </div>
 
-            <div className={'mt-6 px-4 grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 gap-y-12'} >
+            <div className={'mt-6 px-4 grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-4 gap-y-12'}>
                 <MenuItem/>
                 <MenuItem/>
                 <MenuItem/>
@@ -37,7 +37,7 @@ const MenuWrapper = () => {
                 <MenuItem/>
             </div>
 
-            <div className={'p-20'}></div>
+            <div className={'p-10'}></div>
         </div>
     );
 };

@@ -1,73 +1,174 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {ShoppingCart, Star, Heart, Plus, Minus} from "lucide-react";
 import Image from "next/image";
-import {FaSearch, FaShoppingCart, FaUser} from "react-icons/fa";
-import {ShoppingCart, Star, Heart} from "lucide-react";
 
 const MenuItem = () => {
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+    const [isHovered, setIsHovered] = useState(false);
 
-    const price = 25
+    const price = 25;
+    const oldPrice = (price * 1.17).toFixed(2);
+
+    const handleQuantityChange = (change) => {
+        setQuantity(prev => Math.max(1, prev + change));
+    };
+
+    const handleAddToCart = () => {
+        // Cart logic here
+        console.log(`Added ${quantity} items to cart`);
+    };
 
     return (
         <div
-            className={'relative border rounded-md overflow-hidden font-roboto flex flex-col justify-between gap-4 border-gray-300 '}>
-
-            <div
-
-                className="absolute top-0 right-0 z-20 p-2 bg-white/40 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+            className="relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group border border-gray-200"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {/* Favorite Button */}
+            <button
+                onClick={() => setIsFavorite(!isFavorite)}
+                className="absolute top-4 right-4 z-20 p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
             >
-                <button
-
-                    className="absolute top-4 right-4 z-20 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
-                >
-                    <Heart
-                        className={`w-4 h-4 transition-all duration-300 ${
-                            true ? 'text-red-500 scale-110 fill-current' : 'text-gray-400 hover:fill-current hover:text-red-400'
-                        }`}
-                    />
-                </button>
-            </div>
-
-
-            <div className={'relative mt-4 w-48 h-44 hover:scale-105 transition-all duration-500 rounded-full overflow-hidden mx-auto'}>
-                <Image src={'/images/pizza-400.jpg'}
-                       alt={"image"}
-                       fill
-                       sizes="(max-width: 768px) 100vw, 50vw"
-                       className="object-cover "
+                <Heart
+                    className={`w-5 h-5 transition-all duration-300 ${
+                        isFavorite ? 'text-red-500 fill-current' : 'text-gray-400 hover:text-red-400'
+                    }`}
                 />
+            </button>
+
+            {/* Discount Badge */}
+            <div
+                className="absolute top-4 left-4 z-20 bg-gradient-to-r from-amber-400 to-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                15% OFF
             </div>
 
-            <div className="relative bg-gray-800 gap-2 flex text-white flex-col justify-between p-4 ">
-                <div className="absolute overflow-hidden -top-10 w-12 h-10 bg-gray-800 left-0 border-none outline-none">
-                    <div className="w-14 h-10 bg-white border-none outline-none rounded-bl-full shadow-none"/>
+            {/* Image Section */}
+            <div className="relative p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+                <div
+                    className={`relative w-full h-48 transition-all duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`}>
+                    <div
+                        className="w-full h-full rounded-full flex items-center justify-center overflow-hidden shadow-inner">
+                        <div
+                            className="w-40 h-40 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            <div
+                                className={'relative mt-4 w-48 h-44 hover:scale-105 transition-all duration-500 rounded-full overflow-hidden mx-auto'}>
+                                <Image src={'/images/pizza-400.jpg'}
+                                       alt={"image"}
+                                       fill
+                                       sizes="(max-width: 768px) 100vw, 50vw"
+                                       className="object-cover "
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="absolute overflow-hidden top-0 right-0 w-12 h-10 bg-white  border-none outline-none">
-                    <div className="w-12 h-10 bg-gray-800 border-none outline-none rounded-tr-full shadow-none"/>
+                {/* Animated particles */}
+                <div className="absolute inset-0 pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                        <div
+                            key={i}
+                            className={`absolute w-2 h-2 bg-amber-400/30 rounded-full transition-all duration-1000 ${
+                                isHovered ? 'animate-pulse' : ''
+                            }`}
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${i * 0.2}s`
+                            }}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="p-6 space-y-4">
+                {/* Rating */}
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                                key={star}
+                                className={`w-4 h-4 ${
+                                    star <= 4 ? 'text-amber-400 fill-current' : 'text-gray-300'
+                                }`}
+                            />
+                        ))}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">4.9</span>
+                    <span className="text-xs text-gray-500">(124 reviews)</span>
                 </div>
 
-                <div className="flex items-center gap-1 mb-2">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current"/>
-                    <span className="text-sm font-medium text-gray-200">4.9</span>
-                    <span className="text-xs text-gray-400">(124 değerlendirme)</span>
+                {/* Title */}
+                <h2 className="text-xl font-bold text-gray-800 leading-tight">
+                    Delicious Margherita Pizza
+                </h2>
+
+                {/* Description */}
+                <p className="text-sm text-gray-600 leading-relaxed">
+                    Fresh tomatoes, mozzarella cheese, basil leaves on crispy thin crust
+                </p>
+
+                {/* Price Section */}
+                <div className="flex items-center gap-3">
+                    <span className="text-2xl font-bold text-gray-800">
+                        ${price}
+                    </span>
+                    <span className="text-sm text-gray-500 line-through">
+                        ${oldPrice}
+                    </span>
+                    <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                        Save ${(oldPrice - price).toFixed(2)}
+                    </span>
                 </div>
 
-                <h2 className="font-semibold font-dancing text-3xl ">Title</h2>
+                {/* Quantity and Add to Cart */}
+                <div className="flex items-center justify-between pt-2">
+                    {/* Quantity Selector */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-700">Qty:</span>
+                        <div className="flex items-center bg-gray-100 rounded-lg">
+                            <button
+                                onClick={() => handleQuantityChange(-1)}
+                                className="p-2 hover:bg-gray-200 transition-colors duration-200 rounded-l-lg"
+                                disabled={quantity <= 1}
+                            >
+                                <Minus className="w-4 h-4 text-gray-600"/>
+                            </button>
+                            <span className="px-4 py-2 font-medium text-gray-800 min-w-[3rem] text-center">
+                                {quantity}
+                            </span>
+                            <button
+                                onClick={() => handleQuantityChange(1)}
+                                className="p-2 hover:bg-gray-200 transition-colors duration-200 rounded-r-lg"
+                            >
+                                <Plus className="w-4 h-4 text-gray-600"/>
+                            </button>
+                        </div>
+                    </div>
 
-                <div className="flex flex-col">
-                    <span className="text-2xl font-bold font-dancing text-gray-300">
-                        <span className={'text-base'}>$</span>{price}
-                     </span>
-                    <span className="text-xs text-gray-500 line-through">₺{(price * 1.17).toFixed(2)}</span>
-                </div>
-
-                <div className="w-full flex justify-end">
-                    <button className="p-2 hover:scale-105 rounded-full cursor-pointer border border-amber-400">
-                        <FaShoppingCart className="hover:scale-105 text-amber-500"/>
+                    {/* Add to Cart Button */}
+                    <button
+                        onClick={handleAddToCart}
+                        className="flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
+                    >
+                        <ShoppingCart className="w-5 h-5"/>
                     </button>
                 </div>
+
+                {/* Total Price */}
+                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                    <span className="text-sm font-medium text-gray-700">Total:</span>
+                    <span className="text-lg font-bold text-gray-800">
+                        ${(price * quantity).toFixed(2)}
+                    </span>
+                </div>
             </div>
 
+            {/* Hover Effect Overlay */}
+            <div
+                className={`absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent pointer-events-none transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}/>
         </div>
     );
 };

@@ -1,8 +1,8 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react';
-import { RiMenuFold2Line, RiMenuFoldLine } from "react-icons/ri";
+import React, {useEffect, useRef, useState} from 'react';
+import {RiMenuFold2Line, RiMenuFoldLine} from "react-icons/ri";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 import OrderOnline from "@/src/app/components/OrderOnline";
 
 const ScrollMenu = () => {
@@ -40,8 +40,8 @@ const ScrollMenu = () => {
         <div className={'relative'}>
             <div className={"md:hidden mx-2 relative z-50"} onClick={() => setIsMenu(!isMenu)}>
                 {isMenu
-                    ? <RiMenuFold2Line size={24} className={'text-amber-500 cursor-pointer'} />
-                    : <RiMenuFoldLine size={24} className={'text-amber-500 cursor-pointer'} />
+                    ? <RiMenuFold2Line size={24} className={'text-amber-500 cursor-pointer'}/>
+                    : <RiMenuFoldLine size={24} className={'text-amber-500 cursor-pointer'}/>
                 }
             </div>
 
@@ -50,7 +50,7 @@ const ScrollMenu = () => {
                 className={`
                     md:hidden
                     fixed top-0 right-0 h-full w-56 pt-10 
-                    bg-black/20 backdrop-blur-md 
+                    !bg-black/80 !backdrop-blur-md
                     z-40 transition-transform duration-500 ease-in-out
                     ${isMenu ? 'translate-x-0' : 'translate-x-full'}
                 `}
@@ -59,7 +59,8 @@ const ScrollMenu = () => {
                     <Link href='/' className={getLinkClass('/')} onClick={() => setIsMenu(false)}>HOME</Link>
                     <Link href='/menu' className={getLinkClass('/menu')} onClick={() => setIsMenu(false)}>MENU</Link>
                     <Link href='/about' className={getLinkClass('/about')} onClick={() => setIsMenu(false)}>ABOUT</Link>
-                    <Link href='/' className={getLinkClass('/book-table')} onClick={() => setIsMenu(false)}>BOOK TABLE</Link>
+                    <Link href='/' className={getLinkClass('/reservation')} onClick={() => setIsMenu(false)}>BOOK
+                        TABLE</Link>
                 </nav>
 
                 <div className={'p-6 w-full'} onClick={() => setIsMenu(false)}>
