@@ -59,7 +59,7 @@ const ScrollMenu = () => {
                     <Link href='/' className={getLinkClass('/')} onClick={() => setIsMenu(false)}>HOME</Link>
                     <Link href='/menu' className={getLinkClass('/menu')} onClick={() => setIsMenu(false)}>MENU</Link>
                     <Link href='/about' className={getLinkClass('/about')} onClick={() => setIsMenu(false)}>ABOUT</Link>
-                    <Link href='/' className={getLinkClass('/reservation')} onClick={() => setIsMenu(false)}>BOOK
+                    <Link href='/reservation' className={getLinkClass('/reservation')} onClick={() => setIsMenu(false)}>BOOK
                         TABLE</Link>
                 </nav>
 
