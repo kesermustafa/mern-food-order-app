@@ -40,7 +40,8 @@ const Navbar = () => {
                     <div
                         className={`${isHome ? "text-gray-200 md:text-gray-700" : "text-gray-200"} flex mr-4 items-center  gap-4`}>
                         <Link href={"/auth/login"} className={'hover:text-amber-500'}><FaUser size={18}/></Link>
-                        <Link href={"/order"} className={'hover:text-amber-500'}><FaShoppingCart size={18}/></Link>
+                        <Link href={"/order-basket"} className={'hover:text-amber-500'}><FaShoppingCart
+                            size={18}/></Link>
                         <Link href={"/search"} scroll={false} className={'hover:text-amber-500'}>
                             <FaSearch size={18}/>
                         </Link>

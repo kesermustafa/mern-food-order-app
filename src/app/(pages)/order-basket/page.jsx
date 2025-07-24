@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Title from "@/src/app/components/Title";
+import Link from "next/link";
 
 const products = [
     {
@@ -46,7 +47,7 @@ export default function OrderCartPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-312px)]">
 
-            <Title title="Your Orders" desing={'text-4xl text-amber-600 py-4 lg:py-0 font-semibold'}/>
+            <Title title="Your Order Cart" desing={'text-4xl text-amber-600 py-4 lg:py-0 font-semibold'}/>
 
             <div className="w-full h-full md:flex md:gap-4 p-2 rounded-xl">
                 {/* Mobile Stack Layout (hidden on md and above) */}
@@ -182,16 +183,16 @@ export default function OrderCartPage() {
                         </div>
 
                         <div className={'flex items-center justify-center w-full mx-auto'}>
-                            <button
-                                className={'bg-amber-400 px-6 py-2 rounded-full font-exo font-semibold text-sm cursor-pointer hover:bg-amber-500 transition-all duration-300'}
-                                type={'button'}
+                            <Link href={`/orders`}
+                                  className={'bg-amber-400 px-6 py-2 rounded-full font-exo font-semibold text-sm cursor-pointer hover:bg-amber-500 transition-all duration-300'}
+
 
                             >Checkout Now
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
-                {/* Desktop Table Layout (hidden on mobile, shown on md and above) */}
+
 
             </div>
 
