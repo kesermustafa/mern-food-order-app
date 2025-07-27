@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 import Title from "@/src/app/components/Title";
-import {GiKetchup} from "react-icons/gi";
+
 import ExtrasSelector from "@/src/app/components/ExtraSelected";
 
 const ProductDetailPage = async ({params}) => {
@@ -36,7 +36,8 @@ const ProductDetailPage = async ({params}) => {
                             $ <span className={'text-xl font-extrabold'}>10</span>
                         </span>
                         <p className={'font-exo text-gray-700 text-base text-justify leading-relaxed'}>
-                            With a focus on fresh ingredients and authentic flavors, we aim to elevate everyday cooking into something extraordinary.
+                            With a focus on fresh ingredients and authentic flavors, we aim to elevate everyday cooking
+                            into something extraordinary.
                             Join our growing community and explore the world through food.
                         </p>
                     </div>
@@ -55,7 +56,8 @@ const ProductDetailPage = async ({params}) => {
 
                                 />
 
-                                <span className={'absolute top-0 -right-8 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
+                                <span
+                                    className={'absolute top-0 -right-8 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
                                 Small
                             </span>
                             </div>
@@ -69,7 +71,8 @@ const ProductDetailPage = async ({params}) => {
 
                                 />
 
-                                <span className={'absolute top-0 -right-10 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
+                                <span
+                                    className={'absolute top-0 -right-10 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
                                 Medium
                             </span>
                             </div>
@@ -83,7 +86,8 @@ const ProductDetailPage = async ({params}) => {
 
                                 />
 
-                                <span className={'absolute top-0 -right-5 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
+                                <span
+                                    className={'absolute top-0 -right-5 font-semibold bg-amber-400 rounded-full text-sm px-2 '}>
                                 Large
                             </span>
                             </div>
@@ -92,7 +96,7 @@ const ProductDetailPage = async ({params}) => {
                         </div>
                     </div>
 
-{/*                    <div className="w-full space-y-4">
+                    {/*                    <div className="w-full space-y-4">
                         <h2 className="text-2xl font-bold text-gray-800">Ek Malzemeler Seçin</h2>
 
                         <div className="flex flex-wrap gap-4">
@@ -149,11 +153,9 @@ const ProductDetailPage = async ({params}) => {
                     <ExtrasSelector/>
 
 
-
                 </div>
 
             </div>
-
 
 
         </div>

@@ -64,22 +64,6 @@ const MenuItem = () => {
                     </div>
                 </div>
 
-                {/* Animated particles */}
-                <div className="absolute inset-0 pointer-events-none">
-                    {[...Array(6)].map((_, i) => (
-                        <div
-                            key={i}
-                            className={`absolute w-2 h-2 bg-amber-400/30 rounded-full transition-all duration-1000 ${
-                                isHovered ? 'animate-pulse' : ''
-                            }`}
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${i * 0.2}s`
-                            }}
-                        />
-                    ))}
-                </div>
             </div>
 
             {/* Content Section */}
