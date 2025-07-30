@@ -1,52 +1,45 @@
+"use client"
+
 import Image from "next/image";
 import Title from "@/src/app/components/Title";
 import Link from "next/link";
-
-const products = [
-    {
-        id: 1,
-        name: "Pizza",
-        extras: 'Cheese, Tomato',
-        price: 10,
-        quantity: 2,
-        image: '/images/f1.png',
-    },
-    {
-        id: 2,
-        name: "Burger",
-        extras: 'Onion, Lettuce',
-        price: 12,
-        quantity: 1,
-        image: '/images/about-img.png',
-    },
-    {
-        id: 3,
-        name: "Pizza 2",
-        extras: 'Ketchup, Mayo',
-        price: 9,
-        quantity: 3,
-        image: '/images/f1.png',
-    },
-    {
-        id: 4,
-        name: "Turkish Kebap",
-        extras: 'Acili, Salata',
-        price: 19,
-        quantity: 1,
-        image: '/images/f1.png',
-    }
-];
+import useCartStore from "@/src/app/redux/store/cartStore";
 
 export default function OrderCartPage() {
-
-    const subtotal = products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
     const discountPercent = 10;
+    const {quantity, products, total} = useCartStore((state) => state);
+
+    // Calculate totals
+    const subtotal = products.reduce((sum, product) => {
+        // Calculate product total including extras
+        const extrasTotal = product.extras?.reduce((extraSum, extra) => extraSum + extra.price, 0) || 0;
+        return sum + (product.price + extrasTotal) * product.quantity;
+    }, 0);
+
     const discountAmount = subtotal * (discountPercent / 100);
-    const total = subtotal - discountAmount;
+    const allTotal = subtotal - discountAmount;
+
+    // Function to format extras for display
+    const formatExtras = (extras) => {
+        if (!extras || extras.length === 0) return "No extras";
+        return extras.map(extra => extra.name).join(", ");
+    };
+
+    // Function to calculate individual product total including extras
+    const calculateProductTotal = (product) => {
+        const extrasTotal = product.extras?.reduce((sum, extra) => sum + extra.price, 0) || 0;
+        return (product.price + extrasTotal) * product.quantity;
+    };
+
+    const getProductTotalWithExtras = (product) => {
+        const extrasTotal = product.extras?.reduce((sum, extra) => sum + extra.price, 0) || 0;
+        return (product.price + extrasTotal).toFixed(2);
+    };
+
+    console.log(products)
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-312px)]">
-
             <Title title="Your Order Cart" desing={'text-4xl text-amber-600 py-4 lg:py-0 font-semibold'}/>
 
             <div className="w-full h-full md:flex md:gap-4 p-2 rounded-xl">
@@ -68,21 +61,20 @@ export default function OrderCartPage() {
                                                sizes={"(max-width: 768px) 100vw, 200px"}
                                                style={{objectFit: "cover"}}/>
                                     </div>
-
                                 </div>
                             </div>
 
                             <div className="space-y-2">
                                 <div className="flex justify-between">
                                     <span className="font-medium text-gray-700">Extras</span>
-                                    <span>{product.extras}</span>
+                                    <span>{formatExtras(product.extras)}</span>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <span className="font-medium text-gray-700">Price</span>
                                     <span>
                                         <span className="text-sm">$</span>
-                                        <span className="font-semibold">{product.price}</span>
+                                        <span className="font-semibold">{getProductTotalWithExtras(product)}</span>
                                     </span>
                                 </div>
 
@@ -95,14 +87,13 @@ export default function OrderCartPage() {
                                     <span className="font-medium text-gray-700">Total</span>
                                     <span className="font-bold text-lg">
                                         <span className="text-sm">$</span>
-                                        <span>{product.quantity * product.price}</span>
+                                        <span>{calculateProductTotal(product).toFixed(2)}</span>
                                     </span>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-
 
                 <div className={'flex flex-col lg:flex-row gap-10 lg:gap-4 w-full p-10 '}>
                     <div className="hidden md:flex-1 md:block overflow-x-auto">
@@ -129,20 +120,19 @@ export default function OrderCartPage() {
                                             <Image src={product.image} alt="food image" fill
                                                    sizes={"(max-width: 768px) 100vw, 200px"}
                                                    style={{objectFit: "cover"}}/>
-
                                         </div>
                                         <span className={'font-semibold'}>{product.name}</span>
                                     </td>
-                                    <td>{product.extras}</td>
+                                    <td>{formatExtras(product.extras)}</td>
                                     <td className="text-center">
                                         <span className="text-sm">$</span>
-                                        <span className="font-semibold">{product.price}</span>
+                                        <span className="font-semibold">{getProductTotalWithExtras(product)}</span>
                                     </td>
                                     <td className="text-center">{product.quantity}</td>
                                     <td className="max-w-16 text-center">
                                         <span className="text-sm">$</span>
                                         <span className="font-semibold">
-                                            {product.quantity * product.price}
+                                            {calculateProductTotal(product).toFixed(2)}
                                         </span>
                                     </td>
                                 </tr>
@@ -159,43 +149,38 @@ export default function OrderCartPage() {
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-700">Subtotal</span>
                                 <span className="font-semibold">
-                                <span className="text-sm">$</span>
-                                <span>{subtotal.toFixed(2)}</span>
-                            </span>
+                                    <span className="text-sm">$</span>
+                                    <span>{subtotal.toFixed(2)}</span>
+                                </span>
                             </div>
 
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-700">Discount</span>
                                 <span className="text-red-600 font-semibold">
-                                -{discountPercent}% ($<span>{discountAmount.toFixed(2)}</span>)
-                            </span>
+                                    -{discountPercent}% ($<span>{discountAmount.toFixed(2)}</span>)
+                                </span>
                             </div>
 
                             <div className="border-t pt-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-xl font-bold text-gray-800">Total</span>
                                     <span className="text-xl font-bold text-green-600">
-                                    <span className="text-sm">$</span>
-                                    <span>{total.toFixed(2)}</span>
-                                </span>
+                                        <span className="text-sm">$</span>
+                                        <span>{allTotal.toFixed(2)}</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         <div className={'flex items-center justify-center w-full mx-auto'}>
                             <Link href={`/orders`}
-                                  className={'bg-amber-400 px-6 py-2 rounded-full font-exo font-semibold text-sm cursor-pointer hover:bg-amber-500 transition-all duration-300'}
-
-
-                            >Checkout Now
+                                  className={'bg-amber-400 px-6 py-2 rounded-full font-exo font-semibold text-sm cursor-pointer hover:bg-amber-500 transition-all duration-300'}>
+                                Checkout Now
                             </Link>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
         </div>
     );
 }

@@ -40,9 +40,9 @@ const PRODUCTS = [
 // Helper Components
 const ProductHeader = () => (
     <div className="flex items-center gap-2">
-    <span className='bg-gray-100 border-2 border-amber-600 p-4 rounded-full flex items-center justify-center'>
-      <Utensils size={32} className="text-amber-600"/>
-    </span>
+        <span className='bg-gray-100 border-2 border-amber-600 p-4 rounded-full flex items-center justify-center'>
+            <Utensils size={32} className="text-amber-600"/>
+        </span>
         <h3 className="text-4xl font-dancing font-semibold text-amber-600">
             Products
         </h3>
@@ -61,77 +61,60 @@ const ProductImage = ({src, alt}) => (
     </div>
 );
 
-const MobileProductItem = ({product, index}) => (
-    <div className={`p-4 rounded-lg font-exo ${index % 2 === 0 ? 'bg-gray-400' : 'bg-gray-200'}`}>
-        <div className="flex items-center justify-between mb-3">
-            <span className="text-lg font-semibold">#{index + 1}</span>
-            <div className="flex items-center gap-2">
-                <span className="font-semibold text-lg">{product.name}</span>
-                <ProductImage src={product.image} alt="food image"/>
-            </div>
+const MobileProductCard = ({product, index}) => (
+    <div
+        className={`rounded-xl font-exo mb-4 overflow-hidden shadow-sm border ${index % 2 === 0 ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-300'}`}>
+        {/* Header */}
+        <div className="bg-gradient-to-r from-gray-800 to-gray-600 px-4 py-2 flex justify-between items-center">
+            <span className="text-white font-semibold text-sm">Product #{index + 1}</span>
+            <span className="text-blue-100 text-xs">ID: {product.id}</span>
         </div>
 
-        <div className="space-y-2">
-            <ProductDetailRow label="Extras" value={product.extras}/>
-            <ProductDetailRow
-                label="Price"
-                value={
-                    <>
-                        <span className="text-sm">$</span>
-                        <span className="font-semibold">{product.price}</span>
-                    </>
-                }
-            />
-            <ProductDetailRow label="Quantity" value={product.quantity} isBold/>
-            <div className="flex items-center border-b justify-between border-dashed border-t py-2">
-                <ProductDetailRow
-                    label="Total"
-                    value={
-                        <>
-                            <span className="text-sm">$</span>
-                            <span>{product.quantity * product.price}</span>
-                        </>
-                    }
-                    isBold
-                    isLarge
-                />
+        {/* Content */}
+        <div className="mt-4 px-2 space-y-2">
+            {/* Image and Title Section */}
+            <div className="flex  items-center space-x-4">
+                <div className="flex-shrink-0">
+                    <ProductImage
+                        src={product.image}
+                        alt="food image"
+                        className="w-20 h-20 object-cover rounded-lg border-2 border-gray-200"
+                    />
+                </div>
+                <div className="flex-1 flex items-center justify-between min-w-0">
+                    <h3 className="font-bold text-gray-900 text-lg leading-tight truncate">
+                        {product.name}
+                    </h3>
+                    <div className="mt-2">
+                        <span className="text-lg font-bold text-green-600">
+                            ${product.price}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Action Section */}
+            <div className="flex py-2 justify-end pt-1 border-t border-gray-200">
+                <button
+                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg">
+                    <span className="text-sm">DELETE</span>
+                </button>
             </div>
         </div>
-    </div>
-);
-
-const ProductDetailRow = ({label, value, isBold = false, isLarge = false}) => (
-    <div className="flex justify-between">
-    <span className={`font-medium text-gray-700 ${isBold ? 'font-semibold' : ''}`}>
-      {label}
-    </span>
-        <span className={`${isBold ? 'font-semibold' : ''} ${isLarge ? 'text-lg' : ''}`}>
-      {value}
-    </span>
     </div>
 );
 
 const DesktopProductRow = ({product, index}) => (
     <tr className={`h-12 hover:bg-gray-600 hover:text-white ${index % 2 === 0 ? 'bg-gray-400 ' : 'bg-gray-200 '}`}>
-        <td className="w-12 text-center">{index + 1}</td>
-        <td className="">
-            <span className="font-semibold">{product.id}</span>
-        </td>
-        <td>
+        <td className="w-16 text-center">{index + 1}</td>
+        <td className="min-w-16">{product.id}</td>
+        <td className="min-w-16">
             <ProductImage src={product.image} alt="food image"/>
-
         </td>
-        <td className="">
-            <span className="font-semibold">{product.name}</span>
-        </td>
-
-        <td className="text-center">${product.price}</td>
-
-        <td className="max-w-16 text-center">
-            <span
-                className="text-sm bg-red-500 px-2 py-1 rounded-md text-white cursor-pointer">DELETE</span>
-
-
+        <td className="min-w-24 font-semibold">{product.name}</td>
+        <td className="min-w-24 text-center">${product.price}</td>
+        <td className="min-w-24 text-center">
+            <span className="text-sm bg-red-500 px-2 py-1 rounded-md text-white cursor-pointer">DELETE</span>
         </td>
     </tr>
 );
@@ -143,10 +126,10 @@ const Products = () => {
                 <ProductHeader/>
 
                 <div className="w-full h-full md:flex md:gap-4 overflow-hidden mt-8 rounded">
-                    {/* Mobile View */}
-                    <div className="md:hidden space-y-4">
+                    {/* Mobile View - Stacked Card Layout */}
+                    <div className="md:hidden space-y-2">
                         {PRODUCTS.map((product, index) => (
-                            <MobileProductItem
+                            <MobileProductCard
                                 key={product.id}
                                 product={product}
                                 index={index}
@@ -154,7 +137,7 @@ const Products = () => {
                         ))}
                     </div>
 
-                    {/* Desktop View */}
+                    {/* Desktop View - Table Layout (unchanged) */}
                     <div className="hidden md:flex-1 md:block overflow-x-auto">
                         <table className="w-full text-left font-exo">
                             <thead>

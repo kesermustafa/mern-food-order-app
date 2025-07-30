@@ -1,0 +1,50 @@
+export const EXTRAS = [
+    {
+        id: 'ketcap',
+        name: 'Ketchup',
+        emoji: '🍅',
+        color: 'bg-red-500',
+        description: 'Klasik domates ketçabı',
+        price: 0.75,
+    },
+    {
+        id: 'mayonez',
+        name: 'Mayonnaise',
+        emoji: '🥄',
+        color: 'bg-yellow-500',
+        description: 'Kremsi mayonez',
+        price: 0.80,
+    },
+    {
+        id: 'sos',
+        name: 'Hot Sauce',
+        emoji: '🌶️',
+        color: 'bg-red-600',
+        description: 'Baharatlı acı sos',
+        price: 1,
+    },
+    {
+        id: 'hardal',
+        name: 'Mustard',
+        emoji: '🟡',
+        color: 'bg-yellow-600',
+        description: 'Fransız hardal',
+        price: 1.5,
+    },
+    {
+        id: 'ranch',
+        name: 'Ranch',
+        emoji: '🥗',
+        color: 'bg-green-500',
+        description: 'Kremalı ranch sos',
+        price: 0.75,
+    },
+    {
+        id: 'barbekü',
+        name: 'Barbecue',
+        emoji: '🔥',
+        color: 'bg-orange-600',
+        description: 'Dumanlı barbekü sos',
+        price: 1.20,
+    }
+];

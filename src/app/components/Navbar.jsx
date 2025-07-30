@@ -6,11 +6,15 @@ import ScrollMenu from "@/src/app/components/scrollMenu";
 import OrderOnline from "@/src/app/components/OrderOnline";
 import {usePathname} from 'next/navigation';
 import {useEffect, useState} from "react";
+import useCartStore from "@/src/app/redux/store/cartStore";
+import useFavoritesStore from "@/src/app/redux/store/useFavoritesStore";
 
 const Navbar = () => {
     const pathname = usePathname();
     const isHome = pathname === '/';
     const [isScrolled, setIsScrolled] = useState(false);
+    const {quantity, products, total} = useCartStore((state) => state);
+    const favorites = useFavoritesStore((state) => state.favorites);
 
     useEffect(() => {
         if (!isHome) return;
@@ -40,8 +44,20 @@ const Navbar = () => {
                     <div
                         className={`${isHome ? "text-gray-200 md:text-gray-700" : "text-gray-200"} flex mr-4 items-center  gap-4`}>
                         <Link href={"/auth/login"} className={'hover:text-amber-500'}><FaUser size={18}/></Link>
-                        <Link href={"/order-basket"} className={'hover:text-amber-500'}><FaShoppingCart
-                            size={18}/></Link>
+
+                        {/* Simple Cart Link with Quantity Badge */}
+                        <div className="relative">
+                            <Link href={"/order-basket"} className="hover:text-amber-500">
+                                <FaShoppingCart size={18}/>
+                                {quantity > 0 && (
+                                    <span
+                                        className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+                                        {quantity}
+                                    </span>
+                                )}
+                            </Link>
+                        </div>
+
                         <Link href={"/search"} scroll={false} className={'hover:text-amber-500'}>
                             <FaSearch size={18}/>
                         </Link>

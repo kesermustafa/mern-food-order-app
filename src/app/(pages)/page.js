@@ -6,6 +6,7 @@ import Input from "@/src/app/components/form/Input";
 import Reservations from "@/src/app/components/Reservations";
 import CustomersReview from "@/src/app/components/CustomersReview";
 import Footer from "@/src/app/components/Footer";
+import DiscountBanner from "@/src/app/components/DiscountBanner";
 
 export default function Home() {
     return (
@@ -13,6 +14,8 @@ export default function Home() {
             <Carousel/>
 
             <Campaigns/>
+
+            <DiscountBanner/>
 
             <MenuWrapper/>
 

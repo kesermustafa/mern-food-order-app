@@ -49,11 +49,11 @@ const page = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-            <div className="container mx-auto px-4 py-8">
+        <div className="min-h-screen xl:container mx-auto px-4 py-8 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div className="">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar */}
-                    <div className="lg:w-80 ">
+                    <div className="lg:w-60 ">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                             {/* Profile Header */}
                             <div className="bg-gradient-to-t from-gray-600 to-gray-900 p-6 text-white">
@@ -75,7 +75,7 @@ const page = () => {
                             </div>
 
                             {/* Navigation Menu */}
-                            <div className="p-4">
+                            <div className="p-2">
                                 <ul className="space-y-2 font-exo">
                                     {menuItems.map((item) => {
                                         const IconComponent = item.icon;
@@ -83,7 +83,7 @@ const page = () => {
                                             <li key={item.id}>
                                                 <button
                                                     onClick={() => setActiveTab(item.id)}
-                                                    className={`w-full cursor-pointer flex items-center gap-3 p-4 rounded-xl transition-all duration-300 text-left group ${
+                                                    className={`w-full cursor-pointer flex items-center gap-3 p-2 px-4 rounded-xl transition-all duration-300 text-left group ${
                                                         activeTab === item.id
                                                             ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                                                             : "hover:bg-gray-50 text-gray-700 hover:text-gray-900"
@@ -107,7 +107,7 @@ const page = () => {
                                 {/* Sign Out Button */}
                                 <button
                                     onClick={handleSignOut}
-                                    className="w-full cursor-pointer flex font-exo items-center gap-3 p-4 rounded-xl mt-4 text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 group"
+                                    className="w-full cursor-pointer flex font-exo items-center gap-3 px-4 p-2 rounded-xl mt-2 text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 group"
                                 >
                                     <LogOut className="text-lg transition-transform group-hover:scale-110"/>
                                     <span className="font-medium">Logout</span>

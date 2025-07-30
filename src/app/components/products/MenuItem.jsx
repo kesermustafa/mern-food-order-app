@@ -1,11 +1,34 @@
 import React, {useState} from 'react';
 import {ShoppingCart, Star, Heart, Plus, Minus} from "lucide-react";
 import Image from "next/image";
+import useCartStore from "@/src/app/redux/store/cartStore";
+import useFavoritesStore from "@/src/app/redux/store/useFavoritesStore";
+import Link from "next/link";
 
 const MenuItem = () => {
-    const [isFavorite, setIsFavorite] = useState(false);
+
+    const addProduct = useCartStore((state) => state.addProduct);
+
     const [quantity, setQuantity] = useState(1);
     const [isHovered, setIsHovered] = useState(false);
+
+    const {favorites, addFavorite, removeFavorite} = useFavoritesStore();
+    const isFavorite = favorites.some((fav) => fav.id === "pizza-1");
+
+    const toggleFavorite = () => {
+        const product = {
+            id: "pizza-1",
+            name: "Delicious Margherita Pizza",
+            image: "/images/pizza-400.jpg",
+            price,
+        };
+
+        if (isFavorite) {
+            removeFavorite(product.id);
+        } else {
+            addFavorite(product);
+        }
+    };
 
     const price = 25;
     const oldPrice = (price * 1.17).toFixed(2);
@@ -15,7 +38,15 @@ const MenuItem = () => {
     };
 
     const handleAddToCart = () => {
-        // Cart logic here
+        const product = {
+            id: "pizza-1", // benzersiz olmalı
+            name: "Delicious Margherita Pizza",
+            price: price * quantity, // toplam fiyat
+            quantity: quantity,
+            image: "/images/pizza-400.jpg",
+        };
+
+        addProduct(product);
         console.log(`Added ${quantity} items to cart`);
     };
 
@@ -27,7 +58,7 @@ const MenuItem = () => {
         >
             {/* Favorite Button */}
             <button
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={toggleFavorite}
                 className="absolute top-4 right-4 z-20 p-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
             >
                 <Heart
@@ -37,6 +68,7 @@ const MenuItem = () => {
                 />
             </button>
 
+
             {/* Discount Badge */}
             <div
                 className="absolute top-4 left-4 z-20 bg-gradient-to-r from-amber-400 to-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
@@ -44,7 +76,7 @@ const MenuItem = () => {
             </div>
 
             {/* Image Section */}
-            <div className="relative p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+            <Link href={"/product/1"} className="relative p-6 bg-gradient-to-br from-gray-50 to-gray-100">
                 <div
                     className={`relative w-full h-48 transition-all duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`}>
                     <div
@@ -64,7 +96,7 @@ const MenuItem = () => {
                     </div>
                 </div>
 
-            </div>
+            </Link>
 
             {/* Content Section */}
             <div className="p-6 space-y-4">
