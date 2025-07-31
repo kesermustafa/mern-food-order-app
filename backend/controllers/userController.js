@@ -244,12 +244,11 @@ export const deleteUserById = async (req, res) => {
 
 export const getUsersPaginated = async (req, res) => {
     try {
-        // Query parametreleri ile sayfalama ve filtre al
+
         const page = parseInt(req.query.page) > 0 ? parseInt(req.query.page) : 1;
         const limit = parseInt(req.query.limit) > 0 ? parseInt(req.query.limit) : 10;
         const skip = (page - 1) * limit;
 
-        // Filtre (örneğin isim araması için, opsiyonel)
         const search = req.query.search ? req.query.search.trim() : '';
 
         const filter = {};
@@ -260,7 +259,6 @@ export const getUsersPaginated = async (req, res) => {
             ];
         }
 
-        // Toplam kullanıcı sayısı
         const totalUsers = await User.countDocuments(filter);
 
         // Sayfalı kullanıcıları getir
@@ -284,6 +282,24 @@ export const getUsersPaginated = async (req, res) => {
         res.status(500).json({message: "Sunucu hatası"});
     }
 };
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find().sort({fullName: 1});
+
+        const usersDTO = users.map(user => UserDTO.fromPOJOtoDTO(user));
+
+        res.status(200).json({
+            message: "Tüm kullanıcılar getirildi",
+            totalUsers: users.length,
+            users: usersDTO,
+        });
+    } catch (error) {
+        console.error("Tüm kullanıcıları getirme hatası:", error);
+        res.status(500).json({message: "Sunucu hatası"});
+    }
+};
+
 
 
 

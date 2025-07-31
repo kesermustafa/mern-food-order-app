@@ -8,12 +8,9 @@ import {
     userSchema
 } from "../models/validation/userValidation.js";
 import {
-    changePassword,
-    createUser, deleteUserById,
-    getCurrentUser,
-    getUserById, getUsersPaginated,
-    updateCurrentUser, updateUserByAdmin,
-    updateUserRole
+    changePassword, createUser, deleteUserById, getAllUsers,
+    getCurrentUser, getUserById, getUsersPaginated,
+    updateCurrentUser, updateUserByAdmin, updateUserRole
 } from "../controllers/userController.js";
 import {loginUser} from "../controllers/authController.js";
 import authorizeRoles from "../middlewares/auth/authorizeRoles.js";
@@ -30,6 +27,14 @@ router.post(
 router.post(
     '/auth/login',
     loginUser);
+
+//all user
+router.get(
+    '/all',
+    authenticate,
+    authorizeRoles('ADMIN'),
+    getAllUsers
+);
 
 //Paginate All User
 router.get(
