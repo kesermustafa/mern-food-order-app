@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const foodSchema = Joi.object({
-    name: Joi.string().trim().min(1).required().messages({
+    name: Joi.string().trim().min(3).required().messages({
         "string.empty": "İsim boş olamaz",
         "any.required": "İsim zorunludur",
     }),
@@ -18,7 +18,7 @@ export const foodSchema = Joi.object({
 
 // PATCH için her alan opsiyonel
 export const partialFoodSchema = Joi.object({
-    name: Joi.string().trim().min(1),
+    name: Joi.string().trim().min(3),
     price: Joi.number().positive(),
     description: Joi.string().allow('').trim(),
     image: Joi.string().uri().messages({

@@ -23,6 +23,7 @@ export const MESSAGE = {
     CONFLICT_CATEGORY: "There is a category registered with this name",
     CONFLICT_PRODUCT: "There is a product registered with this name",
     CONFLICT_ROLE: "There is a role registered with this name",
+    CONFLICT_EMAIL: "There is a email registered with this name",
     NOT_EMPTY: "Name fields must be filled",
     ID_NOT_FOUND: "No record found for this ID",
     SERVER_NOT_FOUND: "Server Not Found",
@@ -36,6 +37,9 @@ export const MESSAGE = {
     CREATE_SUCCESSFUL: "Record operation was successful",
     UPDATE_ERROR: "An error occurred while updating",
     UPDATE_SUCCESSFUL: "Record operation was successful",
+    NOT_FOUND_USER: "Kullanıcı bulunamadı.",
+    INVALID_CREDENTIALS: "Email veya şifre hatalı.",
+    SERVER_ERROR: "Sunucu hatası.",
 };
 
 export const USER_ROLES = {

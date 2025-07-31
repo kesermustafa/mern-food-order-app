@@ -10,44 +10,53 @@ import {
 
 import {foodSchema, partialFoodSchema} from '../models/validation/foodValidation.js';
 import {validateRequest} from '../middlewares/validateRequest.js';
-import {validateObjectId} from '../middlewares/validateObjectId.js';
 import {mapToDTO} from '../middlewares/validateAndMapToDTO.js';
+import {validateObjectId} from "../middlewares/validateObjectId.js";
+
+import verifyToken from "../middlewares/auth/verifyToken.js";
+import authorizeRoles from "../middlewares/auth/authorizeRoles.js";
 
 const router = express.Router();
 
-// GET tüm yemekler
-router.get('/', getAllFoods);
+router.get('/', verifyToken, authorizeRoles("CUSTOMER", "ADMIN"), getAllFoods);
 
-// GET id ile
-router.get('/:id', validateObjectId, getFoodById);
+router.get('/:id', verifyToken, authorizeRoles("CUSTOMER", "ADMIN"), validateObjectId, getFoodById);
 
-// POST yeni yemek
 router.post(
     '/',
+    verifyToken,
+    authorizeRoles("ADMIN"),
     validateRequest(foodSchema),
     mapToDTO,
     createFood
 );
 
-// PUT tam güncelleme
 router.put(
     '/:id',
+    verifyToken,
+    authorizeRoles("ADMIN"),
     validateObjectId,
     validateRequest(foodSchema),
     mapToDTO,
     updateFoodById
 );
 
-// PATCH kısmi güncelleme
 router.patch(
     '/:id',
+    verifyToken,
+    authorizeRoles("ADMIN"),
     validateObjectId,
     validateRequest(partialFoodSchema),
     mapToDTO,
     patchFoodById
 );
 
-// DELETE
-router.delete('/:id', validateObjectId, deleteFoodById);
+router.delete(
+    '/:id',
+    verifyToken,
+    authorizeRoles("ADMIN"),
+    validateObjectId,
+    deleteFoodById
+);
 
 export default router;
