@@ -42,3 +42,41 @@ export const partialUserSchema = Joi.object({
     confirmPassword: Joi.string().valid(Joi.ref("password")),
     emailVerified: Joi.string().allow(null),
 });
+
+export const changePasswordSchema = Joi.object({
+    currentPassword: Joi.string().required().messages({
+        'any.required': 'Mevcut şifre gereklidir.',
+        'string.empty': 'Mevcut şifre boş olamaz.'
+    }),
+    newPassword: Joi.string().min(8).required().messages({
+        'any.required': 'Yeni şifre gereklidir.',
+        'string.min': 'Yeni şifre en az 8 karakter olmalıdır.',
+        'string.empty': 'Yeni şifre boş olamaz.'
+    }),
+    confirmPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({
+        'any.only': 'Şifreler uyuşmuyor.',
+        'any.required': 'Şifre tekrarı gereklidir.'
+    }),
+});
+
+export const updateUserSchema = Joi.object({
+    fullName: Joi.string().min(3).max(100).optional(),
+    email: Joi.string().email().optional(),
+    phoneNumber: Joi.string().min(8).max(15).optional(),
+    address: Joi.string().allow('', null).optional(),
+    job: Joi.string().max(50).optional(),
+    bio: Joi.string().max(500).optional(),
+}).or('fullName', 'email', 'phoneNumber', 'address', 'job', 'bio') // en az bir alan zorunlu
+    .messages({
+        'object.missing': 'En az bir alan güncellenmelidir.',
+    });
+
+export const updateUserByAdminSchema = Joi.object({
+    fullName: Joi.string().min(3).max(100).required(),
+    email: Joi.string().email().required(),
+    phoneNumber: Joi.string().min(8).max(15).required(),
+    address: Joi.string().allow('').required(),
+    job: Joi.string().max(50).allow('').required(),
+    bio: Joi.string().max(500).allow('').required(),
+    role: Joi.string().valid('CUSTOMER', 'ADMIN').required(),
+});
