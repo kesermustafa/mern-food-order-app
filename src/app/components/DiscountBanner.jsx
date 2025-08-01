@@ -39,7 +39,7 @@ const DiscountBanner = () => {
             <div className="relative p-6 text-white">
 
 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
                     {/* Sol taraf - İndirim bilgisi */}
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
@@ -81,7 +81,7 @@ const DiscountBanner = () => {
                     {/* Sağ taraf - CTA butonu */}
                     <div className="ml-6">
                         <Link href={"/order-basket"}
-                              className="group bg-white text-red-500 px-6 py-3 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2">
+                              className="group bg-white text-red-500 px-6 py-3 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center gap-2">
                             <ShoppingCart className="w-5 h-5 group-hover:animate-bounce"/>
                             Sepete Git
                         </Link>

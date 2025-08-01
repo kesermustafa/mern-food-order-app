@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from "next/image";
 
 import {useRouter} from "next/navigation";
@@ -11,6 +11,7 @@ import Categories from "@/src/app/components/admin/Categories";
 
 const page = () => {
     const [activeTab, setActiveTab] = useState(0);
+
     const router = useRouter();
 
     const handleSignOut = () => {
