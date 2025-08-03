@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import jwt from "jsonwebtoken";
 
 export const authConfig = {
     providers: [
@@ -27,12 +28,12 @@ export const authConfig = {
                         return null;
                     }
 
-                    // Dönmesi gereken minimum bilgiler
                     return {
-                        id: data.user.id,
+                        id: data.user._id,
+                        sub: data.user._id,
                         email: data.user.email,
                         role: data.user.role,
-                        token: data.token, // backend'in döndürdüğü JWT
+                        token: data.token,
                     };
                 } catch (error) {
                     console.error("Authorize error:", error);
@@ -43,27 +44,34 @@ export const authConfig = {
     ],
 
     callbacks: {
-        async jwt({token, user, account}) {
-            // İlk login'de user ve account gelir
-            if (user && account) {
-                console.log('JWT Callback - User:', user);
+        async jwt({token, user}) {
+            if (user) {
+
                 token.id = user.id;
+                token.sub = user.id;
                 token.role = user.role;
                 token.accessToken = user.token;
+            } else if (token?.accessToken) {
+
+                try {
+                    const decoded = jwt.decode(token.accessToken);
+                    token.id = decoded?.id;
+                    token.sub = decoded?.id;
+                    token.role = decoded?.role;
+                } catch (e) {
+                    console.error("JWT decode error:", e);
+                }
             }
+
             return token;
         },
 
         async session({session, token}) {
-            console.log('Session Callback - Token:', token);
-            if (token) {
-                session.user.id = token.id;
-                session.user.role = token.role;
-                session.user.token = token.accessToken;
-            }
-            console.log('Session Callback - Final Session:', session);
+            session.user.id = token?.id;
+            session.user.role = token?.role;
+            session.user.token = token?.accessToken;
             return session;
-        },
+        }
     },
 
     pages: {

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import {signOut} from "next-auth/react";
 import {useRouter} from "next/navigation";
+import Swal from 'sweetalert2';
 
 import {
     FaBell,
@@ -16,6 +17,7 @@ import PasswordChange from "@/src/app/components/PasswordChange";
 import {fetchWithAuth} from "@/src/app/utils/fetchWithAuth";
 import {encryptStorage} from "@/src/app/utils/encryptStorage";
 import {toast} from "react-toastify";
+import CustomConfirm from "@/src/app/components/CustomConfirm";
 
 const ProfileClient = ({userId}) => {
 
@@ -42,20 +44,26 @@ const ProfileClient = ({userId}) => {
         loadUser();
     }, []);
 
-    const handleSignOut = () => {
-        if (confirm("Çıkış yapmak istediğinizden emin misiniz?")) {
-            if (encryptStorage) {
-                encryptStorage.removeItem("token");
-            } else {
-                if (typeof window !== "undefined") {
-                    localStorage.removeItem("token");
-                }
-            }
+    const handleSignOut = async () => {
+        const confirmed = await CustomConfirm({
+            title: 'Çıkış yapmak istediğinizden emin misiniz?',
+            text: 'Hesabınızdan çıkış yapılacak.',
+            icon: 'warning',
+            cancelButtonText: 'İptal',
+            confirmButtonText: 'Çıkış Yap',
+        });
 
-            signOut({callbackUrl: "/"}).then(() => {
-                toast.success("Başarıyla çıkış yapıldı.");
-            });
+        if (!confirmed) return;
+
+        if (encryptStorage) {
+            encryptStorage.removeItem('token');
+        } else if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
         }
+
+        signOut({callbackUrl: '/'}).then(() => {
+            toast.success('Başarıyla çıkış yapıldı.');
+        });
     };
 
     const menuItems = [

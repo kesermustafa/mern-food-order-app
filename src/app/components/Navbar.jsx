@@ -9,8 +9,7 @@ import {usePathname, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import useCartStore from "@/src/app/redux/store/cartStore";
 import useFavoritesStore from "@/src/app/redux/store/useFavoritesStore";
-import {encryptStorage} from "@/src/app/utils/encryptStorage";
-import {jwtDecode} from "jwt-decode";
+import {useSession} from "next-auth/react";
 
 const Navbar = () => {
     const pathname = usePathname();
@@ -20,6 +19,8 @@ const Navbar = () => {
     const favorites = useFavoritesStore((state) => state.favorites);
     const router = useRouter();
 
+    const {data: session} = useSession();
+
     useEffect(() => {
         if (!isHome) return;
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -28,25 +29,11 @@ const Navbar = () => {
     }, [isHome]);
 
     const handleUserClick = () => {
-        if (typeof window === "undefined") return;
-
-        const token = encryptStorage.getItem("token");
-
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                const id = decoded.id || decoded.sub;
-                if (id) {
-                    router.push(`/profile/${id}`);
-                    return;
-                }
-            } catch (e) {
-                console.error("Token decode error:", e);
-                encryptStorage.removeItem("token");
-            }
+        if (session?.user?.id) {
+            router.push(`/profile/${session.user.id}`);
+        } else {
+            router.push("/auth/login");
         }
-
-        router.push("/auth/login");
     };
 
     return (

@@ -42,7 +42,8 @@ const LoginPage = () => {
                 });
 
                 if (result?.error) {
-                    throw new Error('Invalid email or password');
+                    toast.error("Invalid email or password");
+                    return;
                 }
 
                 // Giriş başarılı, güncel session'ı al

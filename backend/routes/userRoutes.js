@@ -61,7 +61,7 @@ router.patch(
 // ✅ SPESİFİK ROUTE'LARI ÖNCELİKLE TANIMLAYIN
 //giris yapan kullanici password guncellesin
 router.put(
-    "/change-password",  // ← Bu önce gelmeli
+    "/change-password",
     authenticate,
     validateRequest(changePasswordSchema),
     changePassword
@@ -76,7 +76,7 @@ router.get(
 
 // ADMIN kullanici Role bilgisini degistirsin
 router.put(
-    '/:userId/role',  // ← Bu path'i değiştirin, çakışmasın
+    '/:userId/role',
     authenticate,
     authorizeRoles('ADMIN'),
     updateUserRole
