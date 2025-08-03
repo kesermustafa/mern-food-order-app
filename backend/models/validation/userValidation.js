@@ -44,7 +44,7 @@ export const partialUserSchema = Joi.object({
 });
 
 export const changePasswordSchema = Joi.object({
-    currentPassword: Joi.string().required().messages({
+    password: Joi.string().required().messages({
         'any.required': 'Mevcut şifre gereklidir.',
         'string.empty': 'Mevcut şifre boş olamaz.'
     }),
@@ -53,7 +53,7 @@ export const changePasswordSchema = Joi.object({
         'string.min': 'Yeni şifre en az 8 karakter olmalıdır.',
         'string.empty': 'Yeni şifre boş olamaz.'
     }),
-    confirmPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({
+    confirmPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({ // confirmNewPassword → confirmPassword
         'any.only': 'Şifreler uyuşmuyor.',
         'any.required': 'Şifre tekrarı gereklidir.'
     }),

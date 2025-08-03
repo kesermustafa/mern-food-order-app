@@ -43,8 +43,11 @@ export const authConfig = {
     ],
 
     callbacks: {
-        async jwt({token, user}) {
-            if (user) {
+        async jwt({token, user, account}) {
+            // İlk login'de user ve account gelir
+            if (user && account) {
+                console.log('JWT Callback - User:', user);
+                token.id = user.id;
                 token.role = user.role;
                 token.accessToken = user.token;
             }
@@ -52,10 +55,13 @@ export const authConfig = {
         },
 
         async session({session, token}) {
+            console.log('Session Callback - Token:', token);
             if (token) {
+                session.user.id = token.id;
                 session.user.role = token.role;
                 session.user.token = token.accessToken;
             }
+            console.log('Session Callback - Final Session:', session);
             return session;
         },
     },

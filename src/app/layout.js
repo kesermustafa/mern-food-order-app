@@ -3,6 +3,8 @@ import "slick-carousel/slick/slick-theme.css";
 import {Dancing_Script, Roboto, Exo, Montserrat, Geist, Geist_Mono} from 'next/font/google'
 import "@/src/app/globals.css"
 import {ToastContainer} from "react-toastify";
+import SessionProviderWrapper from "@/src/app/providers/SessionProviderWrapper";
+import SessionSync from "@/src/app/components/SessionSync";
 
 const dancingScript = Dancing_Script({
     subsets: ['latin'],
@@ -48,9 +50,15 @@ export default function RootLayout({children, modal}) {
         <body
             className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} ${roboto.variable} ${exo.variable} ${montserrat.variable} antialiased`}
         >
-        {children}
-        {modal}
-        <ToastContainer position="top-right" autoClose={3000}/>
+
+        <SessionProviderWrapper>
+            <SessionSync/>
+            {children}
+            {modal}
+            <ToastContainer position="top-right" autoClose={2000}/>
+        </SessionProviderWrapper>
+
+
         </body>
         </html>
     );

@@ -1,20 +1,16 @@
 'use client';
-import React, {useEffect} from 'react';
+
+import React, {useEffect, useState} from 'react';
 import {FaUserEdit} from "react-icons/fa";
 import Input from "@/src/app/components/form/Input";
 import {useFormik} from "formik";
 import {profileSchema} from "@/src/app/Schema/profileSchema";
+import {fetchWithAuth} from "@/src/app/utils/fetchWithAuth";
+import {toast} from "react-toastify";
+import LoaderSpin from "@/src/app/components/LoaderSpin";
 
-const AccountInformation = () => {
-
-    // Sahte DB verisi (gerçek projede API'den gelir)
-    const fakeUserFromDB = {
-        fullName: 'Mustafa Keser',
-        phoneNumber: '+90 555 123 45 67',
-        email: 'mustafa@example.com',
-        address: 'İstanbul, Türkiye',
-        birthDate: '1990-05-10'
-    };
+const AccountInformation = ({user}) => {
+    const [error, setError] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -22,28 +18,43 @@ const AccountInformation = () => {
             phoneNumber: '',
             email: '',
             address: '',
-            birthDate: ''
+            job: '',
+            bio: '',
         },
         validationSchema: profileSchema,
         onSubmit: async (values, actions) => {
-            console.log('Gönderilen veriler:', values);
-            // API isteği örneği
-            // await axios.post('/api/update-profile', values);
-            actions.resetForm();
-        }
+            setError(null);
+            try {
+                const data = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
+                    method: "PATCH",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(values),
+                });
+
+                toast.success(data.message || "Profil başarıyla güncellendi.");
+                actions.setTouched({});
+            } catch (err) {
+                const errMsg = err.message || "Güncelleme sırasında bir hata oluştu.";
+                setError(errMsg);
+                toast.error(errMsg);
+            }
+        },
     });
 
     useEffect(() => {
-        formik.setValues(fakeUserFromDB);
-    }, []);
-
-    const inputData = [
-        {id: 'fullName', name: 'fullName', placeholder: 'Your Full Name', type: 'text'},
-        {id: 'phoneNumber', name: 'phoneNumber', placeholder: 'Your Phone Number', type: 'text'},
-        {id: 'email', name: 'email', placeholder: 'Your Email', type: 'email'},
-        {id: 'birthDate', name: 'birthDate', placeholder: 'Your Birth Date', type: 'date'},
-        {id: 'address', name: 'address', placeholder: 'Your Address', type: 'text'},
-    ];
+        if (user) {
+            formik.setValues({
+                fullName: user.fullName || '',
+                phoneNumber: user.phoneNumber || '',
+                email: user.email || '',
+                address: user.address || '',
+                job: user.job || '',
+                bio: user.bio || '',
+            });
+        }
+    }, [user]);
 
     return (
         <div className="space-y-6">
@@ -53,38 +64,61 @@ const AccountInformation = () => {
                     Kişisel Bilgiler
                 </h3>
 
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="mt-10 px-2 flex flex-col lg:flex-row flex-wrap gap-4">
-                        <div className="grid grid-cols-1 xl:grid-cols-2 w-full gap-y-8 gap-4">
-                            {inputData.map((input) => (
-                                <div key={input.id}>
-                                    <Input
-                                        id={input.id}
-                                        type={input.type}
-                                        name={input.name}
-                                        placeholder={input.placeholder}
-                                        value={formik.values[input.name]}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        isValid={input.type !== 'date' ? formik.touched[input.name] && !formik.errors[input.name] : ""}
-                                    />
-                                    {formik.touched[input.name] && formik.errors[input.name] && (
-                                        <p className="text-red-500 text-sm mt-1">{formik.errors[input.name]}</p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                {!user ? (
+                    <LoaderSpin/>
+                ) : (
+                    <>
+                        {error && <p className="text-red-600 mb-4">{error}</p>}
 
-                        <div className="flex w-full flex-col sm:flex-row items-center justify-center gap-4 my-4">
-                            <button
-                                type="submit"
-                                className="px-8 py-3 w-full max-w-80 text-sm bg-amber-500 hover:bg-amber-600 hover:scale-105 shadow-[2px_5px_10px_gray] transition-all duration-300 cursor-pointer text-white font-semibold rounded-2xl"
-                            >
-                                Update Account
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="mt-10 px-2 flex flex-col lg:flex-row flex-wrap gap-4">
+                                <div className="grid grid-cols-1 xl:grid-cols-2 w-full gap-y-8 gap-4">
+                                    {[
+                                        {id: 'fullName', name: 'fullName', placeholder: 'Your Full Name', type: 'text'},
+                                        {
+                                            id: 'phoneNumber',
+                                            name: 'phoneNumber',
+                                            placeholder: 'Your Phone Number',
+                                            type: 'text'
+                                        },
+                                        {id: 'email', name: 'email', placeholder: 'Your Email', type: 'email'},
+                                        {id: 'address', name: 'address', placeholder: 'Your Address', type: 'text'},
+                                        {id: 'job', name: 'job', placeholder: 'Your Job', type: 'text'},
+                                        {id: 'bio', name: 'bio', placeholder: 'Your Bio', type: 'text'},
+                                    ].map((input) => (
+                                        <div key={input.id}>
+                                            <Input
+                                                id={input.id}
+                                                type={input.type}
+                                                name={input.name}
+                                                placeholder={input.placeholder}
+                                                value={formik.values[input.name]}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                isValid={formik.touched[input.name] && !formik.errors[input.name]}
+                                            />
+                                            {formik.touched[input.name] && formik.errors[input.name] && (
+                                                <p className="text-red-500 text-sm mt-1">{formik.errors[input.name]}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+
+
+                                <div
+                                    className="flex w-full flex-col sm:flex-row items-center justify-center gap-4 my-4">
+                                    <button
+                                        type="submit"
+                                        className="px-8 py-3 w-full max-w-80 text-sm bg-amber-500 hover:bg-amber-600 hover:scale-105 shadow-[2px_5px_10px_gray] transition-all duration-300 cursor-pointer text-white font-semibold rounded-2xl"
+                                        disabled={formik.isSubmitting}
+                                    >
+                                        {formik.isSubmitting ? "Güncelleniyor..." : "Update Account"}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </>
+                )}
             </div>
         </div>
     );

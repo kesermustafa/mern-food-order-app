@@ -50,6 +50,24 @@ router.get(
     authenticate,
     getCurrentUser);
 
+//giris yapan kullanici bilgilerini guncellesin
+router.patch(
+    '/me',
+    authenticate,
+    validateRequest(updateUserSchema),
+    authorizeRoles('ADMIN', 'CUSTOMER'),
+    updateCurrentUser);
+
+// ✅ SPESİFİK ROUTE'LARI ÖNCELİKLE TANIMLAYIN
+//giris yapan kullanici password guncellesin
+router.put(
+    "/change-password",  // ← Bu önce gelmeli
+    authenticate,
+    validateRequest(changePasswordSchema),
+    changePassword
+);
+
+// ✅ GENEL PATTERN'LER SONDA
 router.get(
     "/:userId",
     authenticate,
@@ -58,7 +76,7 @@ router.get(
 
 // ADMIN kullanici Role bilgisini degistirsin
 router.put(
-    '/:userId',
+    '/:userId/role',  // ← Bu path'i değiştirin, çakışmasın
     authenticate,
     authorizeRoles('ADMIN'),
     updateUserRole
@@ -71,22 +89,6 @@ router.put(
     authorizeRoles("ADMIN"),
     validateRequest(updateUserByAdminSchema),
     updateUserByAdmin
-);
-
-//giris yapan kullanici bilgilerini guncellesin
-router.patch(
-    '/me',
-    authenticate,
-    validateRequest(updateUserSchema),
-    authorizeRoles('ADMIN', 'CUSTOMER'),
-    updateCurrentUser);
-
-//giris yapan kullanici password guncellesin
-router.put(
-    "/change-password",
-    authenticate,
-    validateRequest(changePasswordSchema),
-    changePassword
 );
 
 router.delete(

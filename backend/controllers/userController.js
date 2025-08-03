@@ -187,11 +187,11 @@ export const getUserById = async (req, res) => {
     }
 };
 
-export const changePassword = async (req, res) => {
+/*export const changePassword = async (req, res) => {
     const userId = req.user.id;
-    const {currentPassword, newPassword} = req.body;
+    const {currentPassword: password, newPassword} = req.body;
 
-    if (!currentPassword || !newPassword) {
+    if (!password || !newPassword) {
         return res.status(400).json({message: "Eski ve yeni şifre gereklidir."});
     }
 
@@ -202,12 +202,48 @@ export const changePassword = async (req, res) => {
         }
 
         // Mevcut şifre doğru mu kontrol et
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({message: "Mevcut şifre hatalı"});
         }
 
         // Yeni şifreyi hashle
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+
+        await user.save();
+
+        res.status(200).json({message: "Şifre başarıyla güncellendi"});
+    } catch (error) {
+        console.error("Şifre güncelleme hatası:", error);
+        res.status(500).json({message: "Sunucu hatası"});
+    }
+};*/
+
+export const changePassword = async (req, res) => {
+    const userId = req.user.id;
+    const {password, newPassword, confirmPassword} = req.body; // confirmPassword ekleyin
+
+    if (!password || !newPassword || !confirmPassword) {
+        return res.status(400).json({message: "Tüm alanlar zorunludur."});
+    }
+
+    // Validation middleware zaten kontrol ediyor ama ekstra güvenlik için:
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({message: "Yeni şifreler eşleşmiyor."});
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({message: "Kullanıcı bulunamadı"});
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({message: "Mevcut şifre hatalı"});
+        }
+
         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedNewPassword;
 

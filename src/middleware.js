@@ -7,7 +7,11 @@ export default auth((req) => {
 
     // 1. Giriş yapmış kullanıcı login sayfasına gidiyorsa ana sayfaya yönlendir
     if (nextUrl.pathname === '/auth/login' && isLoggedIn) {
-        return Response.redirect(new URL('/', nextUrl));
+        // Eğer register sonrası yönlendirildiyse, login sayfasına izin ver
+        const fromRegister = nextUrl.searchParams?.get("from") === "register";
+        if (!fromRegister) {
+            return Response.redirect(new URL('/', nextUrl));
+        }
     }
 
     // 2. Dashboard'a gidiyorsa ve login değilse login'e yönlendir

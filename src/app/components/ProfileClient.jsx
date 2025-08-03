@@ -1,10 +1,10 @@
 'use client';
-import React, {useState} from "react";
-import {useRouter} from "next/navigation";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
+import {signOut} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 import {
-    FaMotorcycle,
     FaBell,
     FaShieldAlt
 } from "react-icons/fa";
@@ -13,15 +13,48 @@ import {HandPlatter, UserRoundCog, KeyRound, BellRing, ShieldUser, LogOut} from 
 
 import AccountInformation from "@/src/app/components/AccountInformation";
 import PasswordChange from "@/src/app/components/PasswordChange";
+import {fetchWithAuth} from "@/src/app/utils/fetchWithAuth";
+import {encryptStorage} from "@/src/app/utils/encryptStorage";
+import {toast} from "react-toastify";
 
 const ProfileClient = ({userId}) => {
 
     const [activeTab, setActiveTab] = useState(0);
     const router = useRouter();
 
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        async function loadUser() {
+            try {
+                const data = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`);
+                setUser(data.user);
+            } catch (err) {
+                console.error("Kullanıcı verisi alınamadı:", err);
+                setError(err.message || "Bir hata oluştu.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadUser();
+    }, []);
+
     const handleSignOut = () => {
         if (confirm("Çıkış yapmak istediğinizden emin misiniz?")) {
-            router.push("/auth/login");
+            if (encryptStorage) {
+                encryptStorage.removeItem("token");
+            } else {
+                if (typeof window !== "undefined") {
+                    localStorage.removeItem("token");
+                }
+            }
+
+            signOut({callbackUrl: "/"}).then(() => {
+                toast.success("Başarıyla çıkış yapıldı.");
+            });
         }
     };
 
@@ -36,7 +69,7 @@ const ProfileClient = ({userId}) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 0:
-                return (<AccountInformation/>);
+                return (<AccountInformation user={user}/>);
             case 1:
                 return (
                     <PasswordChange/>
@@ -152,9 +185,9 @@ const ProfileClient = ({userId}) => {
                             <div className="bg-gradient-to-t from-gray-600 to-gray-900 p-6 text-white">
                                 <div className="flex flex-col items-center">
                                     <div
-                                        className="relative w-20 h-20 rounded-full overflow-hidden ring-4 ring-white/30 mb-3">
+                                        className="relative bg-amber-50 w-20 h-20 rounded-full overflow-hidden ring-4 ring-white/30 mb-3">
                                         <Image
-                                            src="/images/client1.jpg"
+                                            src="/images/admin.png"
                                             alt="profile image"
                                             fill
                                             sizes="80px"
@@ -162,7 +195,7 @@ const ProfileClient = ({userId}) => {
                                             className="object-cover"
                                         />
                                     </div>
-                                    <h2 className="font-bold font-exo text-xl">Sarah Dou</h2>
+                                    <h2 className="font-bold font-exo text-xl">{user?.fullName}</h2>
                                     <p className="text-blue-100 text-sm">Premium Account</p>
                                 </div>
                             </div>
