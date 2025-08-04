@@ -3,7 +3,7 @@ import React from 'react';
 const Reviews = ({customer}) => {
     return (
         <div
-            className="w-[600px] mx-auto bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6">
+            className="w-[400px] xl:w-[600px] mx-auto bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6">
 
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-1">

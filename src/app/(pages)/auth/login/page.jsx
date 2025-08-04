@@ -106,6 +106,13 @@ const LoginPage = () => {
                             </div>
                         ))}
 
+                        <div className={'flex text-sm items-center gap-2 justify-end pe-4'}>
+                            <span>Sifremi unuttum</span>
+                            <Link href={"/auth/forgot-password"}
+                                  className={'text-blue-700 font-semibold hover:underline '}>Password
+                                reset </Link>
+                        </div>
+
                         <div className='flex flex-col items-center justify-evenly gap-6 mb-6'>
                             <div className={'flex flex-col mt-4 gap-6 w-full'}>
                                 <button

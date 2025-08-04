@@ -8,13 +8,13 @@ import {
     userSchema
 } from "../models/validation/userValidation.js";
 import {
-    changePassword, createUser, deleteUserById, getAllUsers,
+    changePassword, createUser, deleteCurrentUser, deleteUserById, getAllUsers,
     getCurrentUser, getUserById, getUsersPaginated,
     updateCurrentUser, updateUserByAdmin, updateUserRole
 } from "../controllers/userController.js";
 import {loginUser} from "../controllers/authController.js";
 import authorizeRoles from "../middlewares/auth/authorizeRoles.js";
-import {authenticate} from "../middlewares/auth/auth.js";
+import {authenticate} from "../middlewares/auth/authenticate.js";
 
 const router = express.Router();
 
@@ -58,7 +58,14 @@ router.patch(
     authorizeRoles('ADMIN', 'CUSTOMER'),
     updateCurrentUser);
 
-// ✅ SPESİFİK ROUTE'LARI ÖNCELİKLE TANIMLAYIN
+// Kullanıcı kendi hesabını silsin
+router.delete(
+    "/me",
+    authenticate,
+    authorizeRoles("CUSTOMER", "ADMIN"),
+    deleteCurrentUser
+);
+
 //giris yapan kullanici password guncellesin
 router.put(
     "/change-password",
@@ -67,7 +74,6 @@ router.put(
     changePassword
 );
 
-// ✅ GENEL PATTERN'LER SONDA
 router.get(
     "/:userId",
     authenticate,

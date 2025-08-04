@@ -5,6 +5,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import foodRoutes from './routes/foodRoutes.js';
 import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config({override: true});
 
@@ -30,6 +31,7 @@ app.use(express.json());
 // Routes
 app.use('/api/foods', foodRoutes);
 app.use("/api/users", userRoutes);
+app.use('/api/auth', authRoutes);
 
 connectDB()
     .then(() => {

@@ -5,7 +5,7 @@ import {auth} from "@/src/auth";
 const MenuPage = async () => {
     const session = await auth();
     const token = session?.user?.token;
-    console.log(token);
+
     return (
         <div className={'pt-20'}>
             <MenuWrapper/>

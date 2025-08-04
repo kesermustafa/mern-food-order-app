@@ -12,19 +12,27 @@ import {foodSchema, partialFoodSchema} from '../models/validation/foodValidation
 import {validateRequest} from '../middlewares/validateRequest.js';
 import {mapToDTO} from '../middlewares/validateAndMapToDTO.js';
 import {validateObjectId} from "../middlewares/validateObjectId.js";
-
-import verifyToken from "../middlewares/auth/verifyToken.js";
+import {authenticate} from "../middlewares/auth/authenticate.js";
 import authorizeRoles from "../middlewares/auth/authorizeRoles.js";
 
 const router = express.Router();
 
-router.get('/', verifyToken, authorizeRoles("CUSTOMER", "ADMIN"), getAllFoods);
+router.get(
+    '/',
+    authenticate,
+    authorizeRoles("CUSTOMER", "ADMIN"),
+    getAllFoods);
 
-router.get('/:id', verifyToken, authorizeRoles("CUSTOMER", "ADMIN"), validateObjectId, getFoodById);
+router.get(
+    '/:id',
+    authenticate,
+    authorizeRoles("CUSTOMER", "ADMIN"),
+    validateObjectId,
+    getFoodById);
 
 router.post(
     '/',
-    verifyToken,
+    authenticate,
     authorizeRoles("ADMIN"),
     validateRequest(foodSchema),
     mapToDTO,
@@ -33,7 +41,7 @@ router.post(
 
 router.put(
     '/:id',
-    verifyToken,
+    authenticate,
     authorizeRoles("ADMIN"),
     validateObjectId,
     validateRequest(foodSchema),
@@ -43,7 +51,7 @@ router.put(
 
 router.patch(
     '/:id',
-    verifyToken,
+    authenticate,
     authorizeRoles("ADMIN"),
     validateObjectId,
     validateRequest(partialFoodSchema),
@@ -53,7 +61,7 @@ router.patch(
 
 router.delete(
     '/:id',
-    verifyToken,
+    authenticate,
     authorizeRoles("ADMIN"),
     validateObjectId,
     deleteFoodById

@@ -73,7 +73,7 @@ const CustomersReview = () => {
                                     {customerReviews
                                         .slice(slideIndex * 2, slideIndex * 2 + 2)
                                         .map((customer) => (
-                                            <div key={customer.id} className="flex max-w-md w-full mx-auto   ">
+                                            <div key={customer.id} className="flex max-w-md gap-4 w-full mx-auto   ">
                                                 <Reviews customer={customer}/>
                                             </div>
                                         ))}

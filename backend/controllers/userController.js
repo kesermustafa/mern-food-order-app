@@ -302,6 +302,27 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
+export const deleteCurrentUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const deletedUser = await User.findByIdAndDelete(userId);
+
+        if (!deletedUser) {
+            return res.status(404).json({message: "Kullanıcı bulunamadı."});
+        }
+
+        const userDTO = UserDTO.fromPOJOtoDTO(deletedUser);
+
+        res.status(200).json({
+            message: "Hesabınız başarıyla silindi.",
+            user: userDTO
+        });
+    } catch (error) {
+        console.error("Kendi hesabını silme hatası:", error);
+        res.status(500).json({message: "Sunucu hatası."});
+    }
+};
 
 
 

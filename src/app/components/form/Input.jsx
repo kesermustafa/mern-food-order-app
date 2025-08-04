@@ -1,4 +1,4 @@
-import {CheckCircle} from "lucide-react";
+import {Check} from "lucide-react";
 import React from "react";
 
 const Input = ({
@@ -53,8 +53,8 @@ const Input = ({
                 </label>
 
                 {isValid && (
-                    <CheckCircle
-                        className="w-5 h-5 text-green-500 absolute right-4 top-1/2 transform -translate-y-1/2"
+                    <Check
+                        className="w-5 h-5 text-green-500 absolute right-0 top-1/5 transform -translate-y-1/2"
                     />
                 )}
             </div>
